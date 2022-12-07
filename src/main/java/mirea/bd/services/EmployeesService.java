@@ -1,6 +1,8 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Employee;
 import mirea.bd.models.Status;
+import mirea.bd.repositories.EmployeesRepository;
 import mirea.bd.repositories.StatusesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,35 +13,35 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class EmployeesService {
-    private final StatusesRepository statusesRepository;
+    private final EmployeesRepository employeesRepository;
 
-    public EmployeesService(StatusesRepository textilesRepository) {
-        this.statusesRepository = textilesRepository;
+    public EmployeesService(EmployeesRepository employeesRepository) {
+        this.employeesRepository = employeesRepository;
     }
 
-    public List<Status> findAll(){
-        return statusesRepository.findAll();
+    public List<Employee> findAll(){
+        return employeesRepository.findAll();
     }
 
-    public Status findOne(int id){
-        Optional<Status> foundStatus =  statusesRepository.findById(id);
-        return foundStatus.orElse(null);
-    }
-
-    @Transactional
-    public void save(Status status){
-        statusesRepository.save(status);
+    public Employee findOne(int id){
+        Optional<Employee> foundEmployee =  employeesRepository.findById(id);
+        return foundEmployee.orElse(null);
     }
 
     @Transactional
-    public void update(int id, Status updatedstatus){
-        updatedstatus.setId(id);
-        statusesRepository.save(updatedstatus);
+    public void save(Employee employee){
+        employeesRepository.save(employee);
+    }
+
+    @Transactional
+    public void update(int id, Employee updatedEmployee){
+        updatedEmployee.setId(id);
+        employeesRepository.save(updatedEmployee);
     }
 
     @Transactional
     public void delete(int id){
-        statusesRepository.deleteById(id);
+        employeesRepository.deleteById(id);
     }
 
     public void test(){

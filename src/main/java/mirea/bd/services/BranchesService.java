@@ -1,6 +1,8 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Branch;
 import mirea.bd.models.Status;
+import mirea.bd.repositories.BranchesRepository;
 import mirea.bd.repositories.StatusesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,35 +13,35 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class BranchesService {
-    private final StatusesRepository statusesRepository;
+    private final BranchesRepository branchesRepository;
 
-    public BranchesService(StatusesRepository textilesRepository) {
-        this.statusesRepository = textilesRepository;
+    public BranchesService(BranchesRepository branchesRepository) {
+        this.branchesRepository = branchesRepository;
     }
 
-    public List<Status> findAll(){
-        return statusesRepository.findAll();
+    public List<Branch> findAll(){
+        return branchesRepository.findAll();
     }
 
-    public Status findOne(int id){
-        Optional<Status> foundStatus =  statusesRepository.findById(id);
-        return foundStatus.orElse(null);
-    }
-
-    @Transactional
-    public void save(Status status){
-        statusesRepository.save(status);
+    public Branch findOne(int id){
+        Optional<Branch> foundBranch =  branchesRepository.findById(id);
+        return foundBranch.orElse(null);
     }
 
     @Transactional
-    public void update(int id, Status updatedstatus){
-        updatedstatus.setId(id);
-        statusesRepository.save(updatedstatus);
+    public void save(Branch branch){
+        branchesRepository.save(branch);
+    }
+
+    @Transactional
+    public void update(int id, Branch updatedBranch){
+        updatedBranch.setId(id);
+        branchesRepository.save(updatedBranch);
     }
 
     @Transactional
     public void delete(int id){
-        statusesRepository.deleteById(id);
+        branchesRepository.deleteById(id);
     }
 
     public void test(){

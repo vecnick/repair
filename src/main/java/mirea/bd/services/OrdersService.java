@@ -1,7 +1,8 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Order;
 import mirea.bd.models.Status;
-import mirea.bd.repositories.StatusesRepository;
+import mirea.bd.repositories.OrdersRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,35 +12,35 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class OrdersService {
-    private final StatusesRepository statusesRepository;
+    private final OrdersRepository ordersRepository;
 
-    public OrdersService(StatusesRepository textilesRepository) {
-        this.statusesRepository = textilesRepository;
+    public OrdersService(OrdersRepository ordersRepository) {
+        this.ordersRepository = ordersRepository;
     }
 
-    public List<Status> findAll(){
-        return statusesRepository.findAll();
+    public List<Order> findAll(){
+        return ordersRepository.findAll();
     }
 
-    public Status findOne(int id){
-        Optional<Status> foundStatus =  statusesRepository.findById(id);
-        return foundStatus.orElse(null);
-    }
-
-    @Transactional
-    public void save(Status status){
-        statusesRepository.save(status);
+    public Order findOne(int id){
+        Optional<Order> foundOrder =  ordersRepository.findById(id);
+        return foundOrder.orElse(null);
     }
 
     @Transactional
-    public void update(int id, Status updatedstatus){
-        updatedstatus.setId(id);
-        statusesRepository.save(updatedstatus);
+    public void save(Order order){
+        ordersRepository.save(order);
+    }
+
+    @Transactional
+    public void update(int id, Order updatedOrder){
+        updatedOrder.setId(id);
+        ordersRepository.save(updatedOrder);
     }
 
     @Transactional
     public void delete(int id){
-        statusesRepository.deleteById(id);
+        ordersRepository.deleteById(id);
     }
 
     public void test(){

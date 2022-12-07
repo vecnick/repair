@@ -1,6 +1,8 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Condition;
 import mirea.bd.models.Status;
+import mirea.bd.repositories.ConditionsRepository;
 import mirea.bd.repositories.StatusesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,35 +13,35 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 public class ConditionsService {
-    private final StatusesRepository statusesRepository;
+    private final ConditionsRepository conditionsRepository;
 
-    public ConditionsService(StatusesRepository textilesRepository) {
-        this.statusesRepository = textilesRepository;
+    public ConditionsService(ConditionsRepository conditionsRepository) {
+        this.conditionsRepository = conditionsRepository;
     }
 
-    public List<Status> findAll(){
-        return statusesRepository.findAll();
+    public List<Condition> findAll(){
+        return conditionsRepository.findAll();
     }
 
-    public Status findOne(int id){
-        Optional<Status> foundStatus =  statusesRepository.findById(id);
-        return foundStatus.orElse(null);
-    }
-
-    @Transactional
-    public void save(Status status){
-        statusesRepository.save(status);
+    public Condition findOne(int id){
+        Optional<Condition> foundCondition =  conditionsRepository.findById(id);
+        return foundCondition.orElse(null);
     }
 
     @Transactional
-    public void update(int id, Status updatedstatus){
-        updatedstatus.setId(id);
-        statusesRepository.save(updatedstatus);
+    public void save(Condition condition){
+        conditionsRepository.save(condition);
+    }
+
+    @Transactional
+    public void update(int id, Condition updatedCondition){
+        updatedCondition.setId(id);
+        conditionsRepository.save(updatedCondition);
     }
 
     @Transactional
     public void delete(int id){
-        statusesRepository.deleteById(id);
+        conditionsRepository.deleteById(id);
     }
 
     public void test(){
