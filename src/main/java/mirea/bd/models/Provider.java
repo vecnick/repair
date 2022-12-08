@@ -28,7 +28,7 @@ public class Provider {
     @NotEmpty(message = "provider surname should not be empty")
     @Column(name = "second_name")
     @NonNull
-    private String second_name;
+    private String secondName;
 
     @Column(name = "patronymic")
     @NonNull
@@ -36,7 +36,7 @@ public class Provider {
 
     @Column(name = "telephone_number")
     @NonNull
-    private String telephone_number;
+    private String telephoneNumber;
 
     @OneToMany(mappedBy = "provider")
     private List<RepairMaterial> repairMaterials;

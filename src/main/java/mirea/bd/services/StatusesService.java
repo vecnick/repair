@@ -2,6 +2,8 @@ package mirea.bd.services;
 
 import mirea.bd.models.Status;
 import mirea.bd.repositories.StatusesRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,19 @@ public class StatusesService {
         return statusesRepository.findAll();
     }
 
+    public List<Status> findAll(boolean sortByName) {
+        if (sortByName)
+            return statusesRepository.findAll(Sort.by("name"));
+        else
+            return statusesRepository.findAll();
+    }
+
+    public List<Status> findWithPagination(Integer page, Integer statusesPerPage, boolean sortByName) {
+        if (sortByName)
+            return statusesRepository.findAll(PageRequest.of(page, statusesPerPage, Sort.by("name"))).getContent();
+        else
+            return statusesRepository.findAll(PageRequest.of(page, statusesPerPage)).getContent();
+    }
     public Status findOne(int id){
         Optional<Status> foundStatus =  statusesRepository.findById(id);
         return foundStatus.orElse(null);
@@ -40,6 +55,10 @@ public class StatusesService {
     @Transactional
     public void delete(int id){
         statusesRepository.deleteById(id);
+    }
+
+    public List<Status> searchByName(String query) {
+        return statusesRepository.findByNameStartingWith(query);
     }
 
     public void test(){

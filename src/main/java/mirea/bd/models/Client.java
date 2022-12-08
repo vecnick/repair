@@ -28,7 +28,7 @@ public class Client {
     @NotEmpty(message = "Client surname should not be empty")
     @Column(name = "second_name")
     @NonNull
-    private String second_name;
+    private String secondName;
 
     @Column(name = "patronymic")
     @NonNull
@@ -36,7 +36,7 @@ public class Client {
 
     @Column(name = "telephone_number")
     @NonNull
-    private String telephone_number;
+    private String telephoneNumber;
 
     @OneToMany(mappedBy = "client")
     private List<Order> orders;

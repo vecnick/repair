@@ -19,9 +19,13 @@ public class StatusesController {
     }
 
     @GetMapping()
-    public String index(Model model) {
-        model.addAttribute("statuses", statusesService.findAll());
-        System.out.println(statusesService.findAll());
+    public String index(Model model, @RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "count", required = false) Integer statusesPerPage,
+                        @RequestParam(value = "sort", required = false) boolean sortByName) {
+        if (page == null || statusesPerPage == null)
+            model.addAttribute("statuses", statusesService.findAll(sortByName));
+        else
+            model.addAttribute("statuses", statusesService.findWithPagination(page, statusesPerPage, sortByName));
         return "statuses/index";
     }
 
@@ -32,7 +36,7 @@ public class StatusesController {
     }
 
     @GetMapping("/new")
-    public String newTextile(@ModelAttribute("status") Status status) {
+    public String newStatus(@ModelAttribute("status") Status status) {
         return "statuses/new";
     }
 
@@ -67,5 +71,16 @@ public class StatusesController {
     public String delete(@PathVariable("id") int id) {
         statusesService.delete(id);
         return "redirect:/statuses";
+    }
+
+    @GetMapping("/search")
+    public String searchPage() {
+        return "statuses/search";
+    }
+
+    @PostMapping("/search")
+    public String makeSearch(Model model, @RequestParam("query") String query) {
+        model.addAttribute("statuses", statusesService.searchByName(query));
+        return "statuses/search";
     }
 }

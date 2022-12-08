@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить филлиал</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/branches/{id}(id=${branch.getId()})}" th:object="${branch}">
+
+    <label for="address">Введите адрес: </label>
+    <input type="text" th:field="*{address}" id="address">
+    <div style="color:red" th:if="${#fields.hasErrors('address')}" th:errors="*{address}">address error</div>
+    <br/>
+    <label for="ratingIndicator">Введите рейтинг: </label>
+    <input type="number" th:field="*{ratingIndicator}" id="ratingIndicator">
+    <div style="color:red" th:if="${#fields.hasErrors('ratingIndicator')}" th:errors="*{ratingIndicator}">ratingIndicator error</div>
+    <br/>
+    <input type="submit" value="Редактировать!"/>
+</form>
+</body>
+</html>

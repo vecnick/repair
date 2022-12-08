@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Филлиал</title>
+</head>
+<body>
+
+<p th:text="${branch.getAddress() + ', ' + branch.getRatingIndicator()}">branch</p>
+<form th:method="GET" th:action="@{/branches/{id}/edit(id=${branch.getId()})}">
+    <input type="submit" value="Редактировать"/>
+</form>
+<br/>
+<form th:method="DELETE" th:action="@{/branches/{id}(id=${branch.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
+
+</body>
+</html>

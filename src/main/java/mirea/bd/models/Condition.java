@@ -27,11 +27,11 @@ public class Condition {
 
     @Column(name = "start_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date start_date;
+    private Date startDate;
 
     @Column(name = "end_date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date end_date;
+    private Date endDate;
 
     @ManyToOne
     @JoinColumn(name="order_id", referencedColumnName = "id")

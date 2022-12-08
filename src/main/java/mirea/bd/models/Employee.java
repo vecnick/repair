@@ -28,7 +28,7 @@ public class Employee {
     @NotEmpty(message = "Employee surname should not be empty")
     @Column(name = "second_name")
     @NonNull
-    private String second_name;
+    private String secondName;
 
 
     @Column(name = "patronymic")

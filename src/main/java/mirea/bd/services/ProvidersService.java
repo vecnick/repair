@@ -1,9 +1,12 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Client;
 import mirea.bd.models.Provider;
 import mirea.bd.models.Provider;
 import mirea.bd.repositories.ProvidersRepository;
 import mirea.bd.repositories.StatusesRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +26,19 @@ public class ProvidersService {
         return providersRepository.findAll();
     }
 
+    public List<Provider> findAll(boolean sortBySurname) {
+        if (sortBySurname)
+            return providersRepository.findAll(Sort.by("secondName"));
+        else
+            return providersRepository.findAll();
+    }
+
+    public List<Provider> findWithPagination(Integer page, Integer providersPerPage, boolean sortBySurname) {
+        if (sortBySurname)
+            return providersRepository.findAll(PageRequest.of(page, providersPerPage, Sort.by("secondName"))).getContent();
+        else
+            return providersRepository.findAll(PageRequest.of(page, providersPerPage)).getContent();
+    }
 
     public Provider findOne(int id){
         Optional<Provider> foundProvider =  providersRepository.findById(id);
@@ -43,6 +59,10 @@ public class ProvidersService {
     @Transactional
     public void delete(int id){
         providersRepository.deleteById(id);
+    }
+
+    public List<Provider> searchByName(String query) {
+        return providersRepository.findByNameStartingWith(query);
     }
 
     public void test(){

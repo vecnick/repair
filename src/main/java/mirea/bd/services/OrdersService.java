@@ -1,8 +1,12 @@
 package mirea.bd.services;
 
+import mirea.bd.models.Client;
 import mirea.bd.models.Order;
+import mirea.bd.models.Provider;
 import mirea.bd.models.Status;
 import mirea.bd.repositories.OrdersRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,20 @@ public class OrdersService {
 
     public List<Order> findAll(){
         return ordersRepository.findAll();
+    }
+
+    public List<Order> findAll(boolean sortByTotalPrice) {
+        if (sortByTotalPrice)
+            return ordersRepository.findAll(Sort.by("totalPrice"));
+        else
+            return ordersRepository.findAll();
+    }
+
+    public List<Order> findWithPagination(Integer page, Integer ordersPerPage, boolean sortByTotalPrice) {
+        if (sortByTotalPrice)
+            return ordersRepository.findAll(PageRequest.of(page, ordersPerPage, Sort.by("totalPrice"))).getContent();
+        else
+            return ordersRepository.findAll(PageRequest.of(page, ordersPerPage)).getContent();
     }
 
     public Order findOne(int id){
@@ -41,6 +59,10 @@ public class OrdersService {
     @Transactional
     public void delete(int id){
         ordersRepository.deleteById(id);
+    }
+
+    public List<Order> searchByName(String query) {
+        return ordersRepository.findByNameStartingWith(query);
     }
 
     public void test(){

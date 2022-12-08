@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class Branch {
     @NonNull
     private String address;
 
-
+    @Min(value = 0, message = "rating cant be less than 0!")
     @Column(name = "rating_indicator")
     @NonNull
     private int ratingIndicator;
