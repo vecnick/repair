@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Все поставщики</title>
+</head>
+<body>
+
+<div th:each="provider : ${providers}">
+    <a th:href="@{/providers/{id}(id=${provider.getId()})}"
+       th:text="${provider.getName() + ', ' + provider.getSecondName() + ', ' + provider.getPatronymic()+ ', ' + provider.getTelephoneNumber()}">provider</a>
+</div>
+<br/>
+<hr/>
+
+<a href="/providers/new">Добавить поставщика</a>
+
+</body>
+</html>

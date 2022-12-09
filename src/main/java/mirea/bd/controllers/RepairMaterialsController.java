@@ -1,6 +1,8 @@
 package mirea.bd.controllers;
 
+import mirea.bd.models.Provider;
 import mirea.bd.models.RepairMaterial;
+import mirea.bd.services.ProvidersService;
 import mirea.bd.services.RepairMaterialsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +15,11 @@ import javax.validation.Valid;
 @RequestMapping("/repairMaterials")
 public class RepairMaterialsController {
     private final RepairMaterialsService repairMaterialsService;
+    private final ProvidersService providersService;
 
-    public RepairMaterialsController(RepairMaterialsService repairMaterialsService) {
+    public RepairMaterialsController(RepairMaterialsService repairMaterialsService, ProvidersService providersService) {
         this.repairMaterialsService = repairMaterialsService;
+        this.providersService = providersService;
     }
 
     @GetMapping()
@@ -30,8 +34,16 @@ public class RepairMaterialsController {
     }
 
     @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model) {
+    public String show(@PathVariable("id") int id, Model model, @ModelAttribute("provider") Provider provider) {
         model.addAttribute("repairMaterial", repairMaterialsService.findOne(id));
+        model.addAttribute("services", repairMaterialsService.getServicesByRepairMaterialId(id));
+        Provider owner = repairMaterialsService.getRepairMaterialOwner(id);
+
+        if (owner != null)
+            model.addAttribute("owner", owner);
+        else
+            model.addAttribute("providers", providersService.findAll());
+
         return "repairMaterials/show";
     }
 
@@ -71,6 +83,18 @@ public class RepairMaterialsController {
     public String delete(@PathVariable("id") int id) {
         repairMaterialsService.delete(id);
         return "redirect:/repairMaterials";
+    }
+
+    @PatchMapping("/{id}/release")
+    public String release(@PathVariable("id") int id) {
+        repairMaterialsService.release(id);
+        return "redirect:/repairMaterials/" + id;
+    }
+
+    @PatchMapping("/{id}/assign")
+    public String assign(@PathVariable("id") int id, @ModelAttribute("provider") Provider selectedProvider) {
+        repairMaterialsService.assign(id, selectedProvider);
+        return "redirect:/repairMaterials/" + id;
     }
 
     @GetMapping("/search")

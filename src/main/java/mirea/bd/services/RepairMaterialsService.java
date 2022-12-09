@@ -1,14 +1,18 @@
 package mirea.bd.services;
 
 import mirea.bd.models.Order;
+import mirea.bd.models.Provider;
 import mirea.bd.models.RepairMaterial;
 import mirea.bd.repositories.RepairMaterialsRepository;
 import mirea.bd.repositories.ServicesRepository;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +67,38 @@ public class RepairMaterialsService {
 
     public List<RepairMaterial> searchByName(String query) {
         return repairMaterialsRepository.findByNameStartingWith(query);
+    }
+
+    public List<mirea.bd.models.Service> getServicesByRepairMaterialId(int id) {
+        Optional<RepairMaterial> person = repairMaterialsRepository.findById(id);
+
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getServices());
+            return person.get().getServices();
+        }
+        else {
+            return Collections.emptyList();
+        }
+    }
+
+    public Provider getRepairMaterialOwner(int id) {
+        return repairMaterialsRepository.findById(id).map(RepairMaterial::getProvider).orElse(null);
+    }
+
+    @Transactional
+    public void release(int id){
+        repairMaterialsRepository.findById(id).ifPresent(
+                repairMaterial -> {
+                    repairMaterial.setProvider(null);
+                });
+    }
+    @Transactional
+    public void assign(int id, Provider selectedProvider) {
+        repairMaterialsRepository.findById(id).ifPresent(
+                repairMaterial -> {
+                    repairMaterial.setProvider(selectedProvider);
+                }
+        );
     }
 
     public void test(){

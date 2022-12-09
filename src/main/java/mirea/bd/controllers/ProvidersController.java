@@ -32,6 +32,7 @@ public class ProvidersController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("provider", providersService.findOne(id));
+        model.addAttribute("repairMaterials", providersService.getRepairMaterialsByProviderId(id));
         return "providers/show";
     }
 

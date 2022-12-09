@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Материал</title>
+</head>
+<body>
+<p th:text="${repairMaterial.getName() + ', ' + repairMaterial.getRetailPrice() + ', ' + repairMaterial.getAmount()}">repairMaterial</p>
+
+
+<div th:if="${owner}">
+    <span>Поставщик: </span> <span th:text="${owner.getName()}">Provider Name</span>
+
+    <form th:method="PATCH" th:action="@{/repairMaterials/{id}/release(id=${repairMaterial.getId()})}">
+        <input type="submit" value="Убрать поставщика"/>
+    </form>
+</div>
+<div th:if="${providers}">
+    <span>Выберите поставщика этого материала</span>
+    <form th:method="PATCH" th:action="@{/repairMaterials/{id}/assign(id=${repairMaterial.getId()})}">
+        <label for="provider">Выберите человека</label>
+        <select th:object="${provider}" th:field="*{id}" id="provider">
+            <option th:each="provider : ${providers}" th:value="${provider.getId()}" th:text="${provider.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Назначить поставщика"/>
+    </form>
+</div>
+<hr />
+<div th:if="${services.isEmpty()}">
+    <p>Материал еще не выбран</p>
+    <hr/>
+</div>
+
+<div th:if="${!services.isEmpty()}">
+    <hr/>
+    <b>Сервисы:</b>
+    <br/>
+    <table th:each="service : ${services}">
+        <tr>
+            <td>
+                <span th:text="${service.getName() + ', ' + service.getDescription() + ', ' + service.getServicePrice()}">
+                    service
+                </span>
+            </td>
+        </tr>
+    </table>
+    <hr/>
+</div>
+
+<form th:method="GET" th:action="@{/repairMaterials/{id}/edit(id=${repairMaterial.getId()})}">
+    <input type="submit" value="Редактировать"/>
+</form>
+
+<form th:method="DELETE" th:action="@{/repairMaterials/{id}(id=${repairMaterial.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
+
+</body>
+</html>

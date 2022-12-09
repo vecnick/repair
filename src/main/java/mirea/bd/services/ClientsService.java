@@ -1,16 +1,16 @@
 package mirea.bd.services;
 
-import mirea.bd.models.Branch;
-import mirea.bd.models.Client;
-import mirea.bd.models.Provider;
-import mirea.bd.models.Status;
+import mirea.bd.models.*;
 import mirea.bd.repositories.ClientsRepository;
 import mirea.bd.repositories.StatusesRepository;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +63,19 @@ public class ClientsService {
 
     public List<Client> searchByName(String query) {
         return clientsRepository.findByNameStartingWith(query);
+    }
+
+
+    public List<Order> getOrdersByClientId(int id) {
+        Optional<Client> person = clientsRepository.findById(id);
+
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getOrders());
+            return person.get().getOrders();
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 
     public void test(){

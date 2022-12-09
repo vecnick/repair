@@ -33,6 +33,7 @@ public class ClientsController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
         model.addAttribute("client", clientsService.findOne(id));
+        model.addAttribute("orders", clientsService.getOrdersByClientId(id));
         return "clients/show";
     }
 

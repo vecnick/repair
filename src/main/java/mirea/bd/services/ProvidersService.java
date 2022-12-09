@@ -1,15 +1,16 @@
 package mirea.bd.services;
 
-import mirea.bd.models.Client;
-import mirea.bd.models.Provider;
+import mirea.bd.models.*;
 import mirea.bd.models.Provider;
 import mirea.bd.repositories.ProvidersRepository;
 import mirea.bd.repositories.StatusesRepository;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,18 @@ public class ProvidersService {
 
     public List<Provider> searchByName(String query) {
         return providersRepository.findByNameStartingWith(query);
+    }
+
+    public List<RepairMaterial> getRepairMaterialsByProviderId(int id) {
+        Optional<Provider> person = providersRepository.findById(id);
+
+        if (person.isPresent()) {
+            Hibernate.initialize(person.get().getRepairMaterials());
+            return person.get().getRepairMaterials();
+        }
+        else {
+            return Collections.emptyList();
+        }
     }
 
     public void test(){
